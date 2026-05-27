@@ -76,14 +76,3 @@ npm start
 
 ---
 
-## Deploying to Render.com
-
-This applet is fully prepared for zero-configuration, production-ready deployments on **Render**:
-
-1. **Create Web Service**: In Render Dashboard, click **New +** and select **Web Service**.
-2. **Connect Repository**: Connect your exported repository (e.g. GitHub or GitLab).
-3. **Configure Environment settings**:
-   - **Runtime**: `Node`
-   - **Build Command**: `npm install && npm run build`
-   - **Start Command**: `npm start`
-4. Render automatically supplies a dynamic `PORT` environment variable which our compiled server binds to gracefully.
