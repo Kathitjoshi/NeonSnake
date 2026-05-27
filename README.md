@@ -6,6 +6,8 @@ A real-time, low-latency multiplayer 3D snake battle arena. Built under a modern
 
 <img width="2772" height="1452" alt="image" src="https://github.com/user-attachments/assets/56d0f08b-92b5-444e-99af-714a1e11d731" />
 
+<img width="2831" height="1370" alt="image" src="https://github.com/user-attachments/assets/854da7d5-3bb0-4627-8644-a910c34738d9" />
+
 
 ## Features
 
