@@ -4,6 +4,9 @@ A real-time, low-latency multiplayer 3D snake battle arena. Built under a modern
 
 ---
 
+<img width="2772" height="1452" alt="image" src="https://github.com/user-attachments/assets/56d0f08b-92b5-444e-99af-714a1e11d731" />
+
+
 ## Features
 
 - **Smooth Client-Side Prediction**: Implements high-frequency local prediction, input processing, and visual interpolation to deliver instantaneous feel and handle multiplayer jitter elegantly.
