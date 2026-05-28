@@ -76,5 +76,8 @@ npm run build
 npm start
 ```
 
+## LICENSE
+Apache 2.0 License
+
 ---
 
