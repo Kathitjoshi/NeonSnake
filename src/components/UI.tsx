@@ -1,14 +1,9 @@
-/**
- * @license
- * SPDX-License-Identifier: Apache-2.0
-*/
-
 import { useGameStore } from '../store/gameStore';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ExternalLink, Trophy } from 'lucide-react';
 
 export function UI() {
-  const { gameState, playerId, joinGame } = useGameStore();
+  const { gameState, playerId, joinGame, leaveGame, nickname, setNickname } = useGameStore();
 
   const player = playerId && gameState ? gameState.players[playerId] : null;
   const isAlive = player?.state === 'alive';
@@ -27,8 +22,16 @@ export function UI() {
             NEON.SNAKE
           </h1>
           {isAlive && (
-            <div className="text-xl font-mono text-white/80 font-bold">
-              Length: {Math.floor(player.score)}
+            <div className="flex items-center gap-3">
+              <div className="text-xl font-mono text-white/80 font-bold">
+                Length: {Math.floor(player.score)}
+              </div>
+              <button
+                onClick={leaveGame}
+                className="px-3 py-1 bg-red-500/20 hover:bg-red-500/40 border border-red-500/30 hover:border-red-500/60 text-red-400 rounded-full text-[10px] font-mono font-bold uppercase tracking-wider transition-colors pointer-events-auto z-10 cursor-pointer"
+              >
+                Leave Game
+              </button>
             </div>
           )}
         </div>
@@ -96,18 +99,42 @@ export function UI() {
               )}
               
               {!isDead && (
-                <div className="text-center">
-                  <h2 className="text-3xl font-black text-white mb-2">JOIN ARENA</h2>
-                  <p className="text-white/60 text-sm">Steer with A/D or Left/Right. Space to boost.</p>
+                <div className="text-center w-full">
+                  <h2 className="text-3xl font-black text-white mb-2 tracking-tight">JOIN ARENA</h2>
+                  <p className="text-white/60 text-sm mb-6">Steer with A/D or Left/Right. Space to boost.</p>
+                  
+                  <div className="w-full text-left mb-2">
+                    <label className="text-xs font-mono uppercase tracking-wider text-white/50 block mb-1.5 font-bold">
+                      NICKNAME
+                    </label>
+                    <input
+                      type="text"
+                      maxLength={15}
+                      value={nickname}
+                      onChange={(e) => setNickname(e.target.value)}
+                      placeholder="Enter snake nickname..."
+                      className="w-full px-4 py-3 bg-white/5 hover:bg-white/10 focus:bg-white/10 active:bg-white/10 border border-white/10 focus:border-white/20 rounded-xl text-white font-medium placeholder-white/30 outline-none transition-all pointer-events-auto text-center"
+                    />
+                  </div>
                 </div>
               )}
               
-              <button
-                onClick={joinGame}
-                className="w-full py-4 bg-white text-black font-bold rounded-xl hover:bg-gray-200 transition-colors active:scale-95"
-              >
-                {isDead ? 'RESPAWN' : 'PLAY'}
-              </button>
+              <div className="w-full flex flex-col gap-2 pointer-events-auto">
+                <button
+                  onClick={() => joinGame(nickname)}
+                  className="w-full py-4 bg-white text-black font-bold rounded-xl hover:bg-gray-200 transition-colors active:scale-95 cursor-pointer"
+                >
+                  {isDead ? 'RESPAWN' : 'PLAY'}
+                </button>
+                {isDead && (
+                  <button
+                    onClick={leaveGame}
+                    className="w-full py-3 bg-zinc-800 hover:bg-zinc-700 text-white font-bold rounded-xl transition-all active:scale-95 cursor-pointer border border-white/5"
+                  >
+                    BACK TO LOBBY
+                  </button>
+                )}
+              </div>
             </div>
           </motion.div>
         )}
