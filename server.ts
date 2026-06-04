@@ -70,8 +70,16 @@ let snakeCounter = 1;
 io.on('connection', (socket) => {
   console.log('Player connected:', socket.id);
 
-  socket.on('join', () => {
-    const name = `Snake-${snakeCounter++}`;
+  socket.on('join', (nickname?: string) => {
+    let name = nickname ? nickname.trim() : '';
+    if (!name) {
+      name = `Snake-${snakeCounter++}`;
+    } else {
+      if (name.length > 15) {
+        name = name.substring(0, 15);
+      }
+    }
+
     const color = COLORS[Math.floor(Math.random() * COLORS.length)];
     const startX = (Math.random() - 0.5) * (WORLD_SIZE - 20);
     const startY = (Math.random() - 0.5) * (WORLD_SIZE - 20);
@@ -98,6 +106,17 @@ io.on('connection', (socket) => {
     };
 
     socket.emit('init', socket.id);
+  });
+
+  socket.on('leave_game', () => {
+    const player = state.players[socket.id];
+    if (player && player.state === 'alive') {
+      // Drop orbs
+      player.segments.forEach((seg, i) => {
+        if (i % 2 === 0) spawnOrb(seg.x, seg.y, 1, player.color, true);
+      });
+    }
+    delete state.players[socket.id];
   });
 
   socket.on('update_state', (data: { segments: any[], score: number, currentAngle: number, isBoosting: boolean, state: string }) => {
