@@ -11,8 +11,11 @@ interface GameStore {
   socket: Socket | null;
   gameState: GameState | null;
   playerId: string | null;
+  nickname: string;
+  setNickname: (nickname: string) => void;
   connect: () => void;
-  joinGame: () => void;
+  joinGame: (nickname?: string) => void;
+  leaveGame: () => void;
   sendPlayerState: (data: any) => void;
   sendCollectOrb: (orbId: string) => void;
 }
@@ -24,6 +27,11 @@ export const useGameStore = create<GameStore>((set, get) => ({
   socket: null,
   gameState: null,
   playerId: null,
+  nickname: localStorage.getItem('neon_snake_nickname') || '',
+  setNickname: (nickname: string) => {
+    localStorage.setItem('neon_snake_nickname', nickname);
+    set({ nickname });
+  },
   connect: () => {
     if (get().socket) return;
     
@@ -48,10 +56,17 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
     set({ socket });
   },
-  joinGame: () => {
+  joinGame: (nickname) => {
+    const { socket, nickname: storedNickname } = get();
+    if (socket) {
+      const nameToJoin = nickname !== undefined ? nickname : storedNickname;
+      socket.emit('join', nameToJoin);
+    }
+  },
+  leaveGame: () => {
     const { socket } = get();
     if (socket) {
-      socket.emit('join');
+      socket.emit('leave_game');
     }
   },
   sendPlayerState: (data) => {
